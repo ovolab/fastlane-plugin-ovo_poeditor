@@ -12,9 +12,7 @@ fastlane add_plugin ovo_poeditor
 
 ## About ovo_poeditor
 
-Fetch latest POEditor terms and download them as .xcstrings file
-
-**Note to author:** Add a more detailed description about this plugin here. If your plugin contains multiple actions, make sure to mention them here.
+Fetch latest POEditor terms and download them as `.xcstrings/.strings` file
 
 ## Available Actions
 
