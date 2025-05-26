@@ -1,0 +1,17 @@
+lane :xcstrings do
+  ovo_poeditor_xcstrings(
+    api_token: "FANCY_API_TOKEN",
+    project_id: "FANCY_PROJECT_ID",
+    ref_language: "FANCY_LANGUAGE",
+    output_dir: "./xcstrings"
+  )
+end
+
+lane :strings do
+  ovo_poeditor_strings(
+    api_token: "FANCY_API_TOKEN",
+    project_id: "FANCY_PROJECT_ID",
+    languages: ["FANCY_LANGUAGE_1", "FANCY_LANGUAGE_2"],
+    output_dir: "./strings"
+  )
+end
