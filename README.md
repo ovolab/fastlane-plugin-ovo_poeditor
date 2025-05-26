@@ -18,7 +18,7 @@ Fetch latest POEditor terms and download them as .xcstrings file
 
 ## Available Actions
 
-### ovo_gptdriver_upload_build
+### ovo_poeditor_xcstrings
 
 This action will download the latest terms from POEditor to the specified `output_dir` as `Localizable.xcstring` file.
 
@@ -30,6 +30,8 @@ ovo_poeditor_xcstrings(
     output_dir: "./xcstrings"
   )
 ```
+
+### ovo_poeditor_strings
 
 This action will download the latest terms from POEditor to the specified `output_dir` as `language.lproj/Localizable.string` file.
 
