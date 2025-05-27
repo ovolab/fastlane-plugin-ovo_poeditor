@@ -1,4 +1,4 @@
-# ovo_poeditor plugin
+# Ovo POEditor Plugin
 
 [![fastlane Plugin Badge](https://rawcdn.githack.com/fastlane/fastlane/master/fastlane/assets/plugin-badge.svg)](https://rubygems.org/gems/fastlane-plugin-ovo_poeditor)
 
@@ -10,7 +10,7 @@ This project is a [_fastlane_](https://github.com/fastlane/fastlane) plugin. To 
 fastlane add_plugin ovo_poeditor
 ```
 
-## About ovo_poeditor
+## About Ovo POEditor
 
 Fetch latest POEditor terms and download them as `.xcstrings/.strings/.xml` file
 
