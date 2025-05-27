@@ -89,6 +89,8 @@ module Fastlane
       def self.build_output_path(base_dir, language, file_name, format)
         if format == "xcstrings"
           "#{base_dir}/#{file_name}"
+        elsif format == "apple_strings"
+          "#{base_dir}/#{language}.lproj/#{file_name}"
         else
           "#{base_dir}/#{language}/#{file_name}"
         end
