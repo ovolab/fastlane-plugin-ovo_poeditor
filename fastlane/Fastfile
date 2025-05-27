@@ -1,17 +1,35 @@
-lane :xcstrings do
-  ovo_poeditor_xcstrings(
-    api_token: "FANCY_API_TOKEN",
-    project_id: "FANCY_PROJECT_ID",
-    ref_language: "FANCY_LANGUAGE",
-    output_dir: "./xcstrings"
+desc "Download iOS terms as .xcstrings file"
+lane :ios_xcstrings do
+  ovo_poeditor_strings(
+    api_token: "api_token",
+    project_id: "project_id",
+    languages: ["en", "fr", "it"],
+    output_dir: "./XCStrings",
+    file_format: "xcstrings",
+    file_name: "Localizable.xcstrings"
   )
 end
 
-lane :strings do
+desc "Download iOS terms as .strings file"
+lane :ios_strings do
   ovo_poeditor_strings(
-    api_token: "FANCY_API_TOKEN",
-    project_id: "FANCY_PROJECT_ID",
-    languages: ["FANCY_LANGUAGE_1", "FANCY_LANGUAGE_2"],
-    output_dir: "./strings"
+    api_token: "api_token",
+    project_id: "project_id",
+    languages: ["en", "fr", "it"],
+    output_dir: "./Strings",
+    file_format: "apple_strings",
+    file_name: "Localizable.strings"
+  )
+end
+
+desc "Download Android terms as .xml file"
+lane :android_strings do
+  ovo_poeditor_strings(
+    api_token: "api_token",
+    project_id: "project_id",
+    languages: ["en", "fr", "it"],
+    output_dir: "./Android",
+    file_format: "android_strings",
+    file_name: "strings.xml"
   )
 end

@@ -18,29 +18,47 @@ Fetch latest POEditor terms and download them as `.xcstrings/.strings` file
 
 ### ovo_poeditor_xcstrings
 
-This action will download the latest terms from POEditor to the specified `output_dir` as `Localizable.xcstring` file.
+This action will download the latest terms from POEditor to the specified `output_dir` in the specified `file_format`.
 
-```ruby
-ovo_poeditor_xcstrings(
-    api_token: api_token,
-    project_id: project_id,
-    ref_language: ref_language,
-    output_dir: "./xcstrings"
-  )
-```
+#### iOS
 
-### ovo_poeditor_strings
-
-This action will download the latest terms from POEditor to the specified `output_dir` as `language.lproj/Localizable.string` file.
-
+##### `xcstrings`:
 ```ruby
 ovo_poeditor_strings(
-    api_token: api_token,
-    project_id: project_id,
-    languages: [language, another_language],
-    output_dir: "./strings"
+  api_token: "api_token",
+  project_id: "project_id",
+  languages: ["fr"], 
+  output_dir: "./XCStrings",
+  file_format: "xcstrings",
+  file_name: "Localizable.xcstrings"
 )
 ```
+NB: when `file_format: "xcstrings"`, you can pass a single language to the script, it will export all the available languages in the project to the `.xcstrings` file.
+
+##### `strings`:
+```ruby
+ovo_poeditor_strings(
+  api_token: "api_token",
+  project_id: "project_id",
+  languages: ["fr", "en", "it", "ru"], 
+  output_dir: "./Strings",
+  file_format: "apple_strings",
+  file_name: "Localizable.strings"
+)
+```
+
+#### Android
+```ruby
+ovo_poeditor_strings(
+  api_token: "api_token",
+  project_id: "project_id",
+  languages: ["fr", "en", "it", "ru"], 
+  output_dir: "./values",
+  file_format: "android_strings",
+  file_name: "strings.xml"
+)
+```
+
 
 ## Example
 

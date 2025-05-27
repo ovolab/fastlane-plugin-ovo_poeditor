@@ -12,60 +12,86 @@ module Fastlane
     class OvoPoeditorHelper
       # class methods that you define here become available in your action
       # as `Helper::OvoPoeditorHelper.your_method`
-      def self.sync_xcstrings(api_token:, project_id:, language:, output_dir:)
-        UI.message("Fetching terms with token: #{api_token}, for project: #{project_id}, ref language: #{language}")
+      @supported_export_types = ["apple_strings", "xcstrings", "android_strings"].freeze
 
-        export_response = Fastlane::Actions.sh(
-          "curl -s -X POST https://api.poeditor.com/v2/projects/export "\
-          "-d api_token=#{api_token} "\
-          "-d id=#{project_id} "\
-          "-d language=#{language} "\
-          "-d type=xcstrings "\
-          "-d options='[{\"export_all\":1}]'"
-        )
-    
-        export_url = JSON.parse(export_response).dig("result", "url")
-    
-        if export_url.nil?
-          UI.user_error!("Failed to get export URL for #{language}")
+      def self.sync_strings(api_token:, project_id:, languages:, output_dir:, file_format:, file_name:)
+        unless @supported_export_types.include?(file_format)
+          UI.user_error!("Invalid export type '#{file_format}'. Allowed values: #{@supported_export_types.join(', ')}")
         end
-
-        # Download the file
-        strings_data = URI.open(export_url).read
-        output_path = "#{output_dir}/Localizable.xcstrings"
-        FileUtils.mkdir_p(output_dir)
-        File.write(output_path, strings_data)
-
-        UI.success("Downloaded localization file for #{language} to #{output_path}")
-      end
-
-      def self.sync_strings(api_token:, project_id:, languages:, output_dir:)
-        UI.message("Fetching terms with token: #{api_token}, for project: #{project_id}, languages: #{languages}")
 
         languages.each do |language|
-          export_response = Fastlane::Actions.sh(
-          "curl -s -X POST https://api.poeditor.com/v2/projects/export "\
-          "-d api_token=#{api_token} "\
-          "-d id=#{project_id} "\
-          "-d language=#{language} "\
-          "-d type=apple_strings"
+          UI.message("Fetching terms for language: #{language}")
+
+          export_url = fetch_export_url(
+            api_token: api_token,
+            project_id: project_id,
+            language: language,
+            file_format: file_format
           )
-    
-          export_url = JSON.parse(export_response).dig("result", "url")
-    
+
           if export_url.nil?
-            UI.user_error!("Failed to get export URL for #{language}")
+            UI.error("No export URL for language '#{language}'. Please check if it's enabled in POEditor.")
+            next
           end
 
-          # Download the file
-          strings_data = URI.open(export_url).read
-          new_output_dir = "#{output_dir}/#{language}.lproj"
-          output_path = "#{new_output_dir}/Localizable.strings"
-          FileUtils.mkdir_p(new_output_dir)
-          File.write(output_path, strings_data)
+          strings_data = download_file(export_url, language)
+          next unless strings_data
+
+          output_path = build_output_path(output_dir, language, file_name, file_format)
+
+          begin
+            FileUtils.mkdir_p(File.dirname(output_path))
+            File.write(output_path, strings_data)
+            UI.success("Downloaded localization file for #{language} to #{output_path}")
+          rescue Errno::EACCES => e
+            UI.error("Permission denied while writing to #{output_path}: #{e.message}")
+          rescue IOError, SystemCallError => e
+            UI.error("Failed to write file for #{language}: #{e.message}")
+          end
+        end
+      end
+
+      def self.fetch_export_url(api_token:, project_id:, language:, file_format:)
+        uri = URI("https://api.poeditor.com/v2/projects/export")
+        request = Net::HTTP::Post.new(uri)
+
+        form_data = {
+          "api_token" => api_token,
+          "id" => project_id,
+          "language" => language,
+          "order" => "terms",
+          "type" => file_format
+        }
+        form_data["options"] = '[{"export_all":1}]' if file_format == "xcstrings"
+
+        request.set_form_data(form_data)
+
+        response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(request)
         end
 
-        UI.success("Downloaded localization files to #{output_dir}")
+        return nil unless response.is_a?(Net::HTTPSuccess)
+
+        result = JSON.parse(response.body)
+        result.dig("result", "url")
+      rescue JSON::ParserError => e
+        UI.error("Failed to parse POEditor response: #{e.message}")
+        nil
+      end
+
+      def self.download_file(url, language)
+        URI.open(url).read
+      rescue => e
+        UI.error("Error downloading file for language '#{language}': #{e.message}")
+        nil
+      end
+
+      def self.build_output_path(base_dir, language, file_name, format)
+        if format == "xcstrings"
+          "#{base_dir}/#{file_name}"
+        else
+          "#{base_dir}/#{language}/#{file_name}"
+        end
       end
     end
   end
