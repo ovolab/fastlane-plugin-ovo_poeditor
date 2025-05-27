@@ -12,11 +12,11 @@ fastlane add_plugin ovo_poeditor
 
 ## About ovo_poeditor
 
-Fetch latest POEditor terms and download them as `.xcstrings/.strings` file
+Fetch latest POEditor terms and download them as `.xcstrings/.strings/.xml` file
 
 ## Available Actions
 
-### ovo_poeditor_xcstrings
+### ovo_poeditor_strings
 
 This action will download the latest terms from POEditor to the specified `output_dir` in the specified `file_format`.
 
