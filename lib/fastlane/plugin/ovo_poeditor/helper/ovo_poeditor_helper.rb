@@ -16,7 +16,7 @@ module Fastlane
 
       def self.sync_strings(api_token:, project_id:, languages:, output_dir:, file_format:, file_name:)
         unless @supported_export_types.include?(file_format)
-          UI.user_error!("Invalid export type '#{file_format}'. Allowed values: #{@supported_export_types.join(', ')}")
+          UI.error("Invalid export type '#{file_format}'. Allowed values: #{@supported_export_types.join(', ')}")
         end
 
         languages.each do |language|
