@@ -23,7 +23,7 @@ module Fastlane
       end
 
       def self.description
-        "Fetch latest POEditor terms and download them as .xcstrings file"
+        "Fetch latest POEditor terms and download them as .strings/.xml/.xcstrings file"
       end
 
       def self.authors
@@ -32,12 +32,12 @@ module Fastlane
 
       def self.return_value
         # If your method provides a return value, you can describe here what it does
-        "Return an xcstrings file with all POEditor terms"
+        "Return a file with all POEditor terms"
       end
 
       def self.details
         # Optional:
-        "Fetch latest POEditor terms and download them as .xcstrings file"
+        "Fetch latest POEditor terms and download them as .strings/.xml/.xcstrings file"
       end
 
       def self.available_options
@@ -66,7 +66,7 @@ module Fastlane
           FastlaneCore::ConfigItem.new(
             key: :output_dir,
             env_name: "POEDITOR_OUTPUT_DIR",
-            description: "Directory containing xcstrings file",
+            description: "Directory containing strings file",
             optional: false,
             type: String
           ),
