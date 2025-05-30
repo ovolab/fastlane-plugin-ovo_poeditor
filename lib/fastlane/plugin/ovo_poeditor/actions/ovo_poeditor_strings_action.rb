@@ -58,14 +58,14 @@ module Fastlane
           ),
           FastlaneCore::ConfigItem.new(
             key: :languages,
-            env_name: "POEDITOR_XCSTRINGS_LANGUAGES",
+            env_name: "POEDITOR_LANGUAGES",
             description: "The languages to export strings for",
             optional: false,
             type: Array
           ),
           FastlaneCore::ConfigItem.new(
             key: :output_dir,
-            env_name: "POEDITOR_XCSTRINGS_OUTPUT_DIR",
+            env_name: "POEDITOR_OUTPUT_DIR",
             description: "Directory containing xcstrings file",
             optional: false,
             type: String
