@@ -10,8 +10,6 @@ module Fastlane
 
   module Helper
     class OvoPoeditorHelper
-      # class methods that you define here become available in your action
-      # as `Helper::OvoPoeditorHelper.your_method`
       @supported_export_types = ["apple_strings", "xcstrings", "android_strings"].freeze
 
       def self.sync_strings(api_token:, project_id:, languages:, output_dir:, file_format:, file_name:)
