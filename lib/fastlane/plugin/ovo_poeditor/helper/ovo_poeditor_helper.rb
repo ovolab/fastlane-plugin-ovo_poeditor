@@ -74,8 +74,6 @@ module Fastlane
         form_data['options'] = '[{"export_all":1}]' if file_format == 'xcstrings'
         form_data['options'] = "[{'unquoted': #{unquoted_strings}}]" if file_format == 'android_strings'
 
-        puts form_data
-
         request.set_form_data(form_data)
 
         response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
