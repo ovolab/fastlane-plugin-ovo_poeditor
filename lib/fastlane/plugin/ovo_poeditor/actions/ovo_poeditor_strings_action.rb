@@ -23,71 +23,71 @@ module Fastlane
       end
 
       def self.description
-        "Fetch latest POEditor terms and download them as .strings/.xml/.xcstrings file"
+        'Fetch latest POEditor terms and download them as .strings/.xml/.xcstrings file'
       end
 
       def self.authors
-        ["Alessio Arsuffi"]
+        ['Alessio Arsuffi']
       end
 
       def self.return_value
         # If your method provides a return value, you can describe here what it does
-        "Return a file with all POEditor terms"
+        'Return a file with all POEditor terms'
       end
 
       def self.details
         # Optional:
-        "Fetch latest POEditor terms and download them as .strings/.xml/.xcstrings file"
+        'Fetch latest POEditor terms and download them as .strings/.xml/.xcstrings file'
       end
 
       def self.available_options
         [
           FastlaneCore::ConfigItem.new(
             key: :api_token,
-            env_name: "POEDITOR_API_TOKEN",
-            description: "POEditor read-only API Token",
+            env_name: 'POEDITOR_API_TOKEN',
+            description: 'POEditor read-only API Token',
             optional: false,
             type: String
           ),
           FastlaneCore::ConfigItem.new(
             key: :project_id,
-            env_name: "POEDITOR_PROJECT_ID",
-            description: "POEditor Project ID",
+            env_name: 'POEDITOR_PROJECT_ID',
+            description: 'POEditor Project ID',
             optional: false,
             type: String
           ),
           FastlaneCore::ConfigItem.new(
             key: :languages,
-            env_name: "POEDITOR_LANGUAGES",
-            description: "The languages to export strings for",
+            env_name: 'POEDITOR_LANGUAGES',
+            description: 'The languages to export strings for',
             optional: false,
             type: Array
           ),
           FastlaneCore::ConfigItem.new(
             key: :output_dir,
-            env_name: "POEDITOR_OUTPUT_DIR",
-            description: "Directory containing strings file",
+            env_name: 'POEDITOR_OUTPUT_DIR',
+            description: 'Directory containing strings file',
             optional: false,
             type: String
           ),
           FastlaneCore::ConfigItem.new(
             key: :file_name,
-            env_name: "POEDITOR_FILE_NAME",
-            description: "The name of the file to be downloaded",
+            env_name: 'POEDITOR_FILE_NAME',
+            description: 'The name of the file to be downloaded',
             optional: false,
             type: String
           ),
           FastlaneCore::ConfigItem.new(
             key: :file_format,
-            env_name: "POEDITOR_EXPORT_FILE_FORMAT",
-            description: "Export file format (xcstrings, apple_strings, android_strings)",
+            env_name: 'POEDITOR_EXPORT_FILE_FORMAT',
+            description: 'Export file format (xcstrings, apple_strings, android_strings)',
             optional: false,
             type: String
           )
         ]
       end
 
-      def self.is_supported?(platform)
+      def self.is_supported?(_platform)
         true
       end
     end

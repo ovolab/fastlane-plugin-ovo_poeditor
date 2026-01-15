@@ -10,7 +10,7 @@ module Fastlane
 
   module Helper
     class OvoPoeditorHelper
-      @supported_export_types = ["apple_strings", "xcstrings", "android_strings"].freeze
+      @supported_export_types = %w[apple_strings xcstrings android_strings].freeze
 
       def self.sync_strings(api_token:, project_id:, languages:, output_dir:, file_format:, file_name:)
         unless @supported_export_types.include?(file_format)
@@ -50,7 +50,7 @@ module Fastlane
       end
 
       def self.fetch_export_url(api_token:, project_id:, language:, file_format:)
-        uri = URI("https://api.poeditor.com/v2/projects/export")
+        uri = URI('https://api.poeditor.com/v2/projects/export')
         request = Net::HTTP::Post.new(uri)
 
         form_data = {
@@ -60,7 +60,7 @@ module Fastlane
           "order" => "terms",
           "type" => file_format
         }
-        form_data["options"] = '[{"export_all":1}]' if file_format == "xcstrings"
+        form_data['options'] = '[{"export_all":1}]' if file_format == 'xcstrings'
 
         request.set_form_data(form_data)
 
@@ -71,7 +71,7 @@ module Fastlane
         return nil unless response.is_a?(Net::HTTPSuccess)
 
         result = JSON.parse(response.body)
-        result.dig("result", "url")
+        result.dig('result', 'url')
       rescue JSON::ParserError => e
         UI.error("Failed to parse POEditor response: #{e.message}")
         nil
@@ -79,18 +79,18 @@ module Fastlane
 
       def self.download_file(url, language)
         URI.open(url).read
-      rescue => e
+      rescue StandardError => e
         UI.error("Error downloading file for language '#{language}': #{e.message}")
         nil
       end
 
       def self.build_output_path(base_dir, language, file_name, format)
-        if format == "xcstrings"
+        if format == 'xcstrings'
           "#{base_dir}/#{file_name}"
-        elsif format == "apple_strings"
+        elsif format == 'apple_strings'
           "#{base_dir}/#{language}.lproj/#{file_name}"
         else
-          "#{base_dir}/#{language}/#{file_name}"
+          "#{base_dir}/values-#{language}/#{file_name}" # ANDROID // values-{language}/strings.xml
         end
       end
     end
