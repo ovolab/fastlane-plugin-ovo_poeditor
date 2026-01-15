@@ -55,7 +55,12 @@ ovo_poeditor_strings(
   languages: ["fr", "en", "it", "ru"], 
   output_dir: "./values",
   file_format: "android_strings",
-  file_name: "strings.xml"
+  file_name: "strings.xml",
+  default_language: 'default-lang',
+    language_map: {
+      'language1' => 'language-country1',
+      'language2' => 'language-country2'
+    }
 )
 ```
 
