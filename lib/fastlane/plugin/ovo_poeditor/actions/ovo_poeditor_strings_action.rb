@@ -11,6 +11,8 @@ module Fastlane
         output_dir = params[:output_dir]
         file_format = params[:file_format]
         file_name = params[:file_name]
+        default_language = params[:default_language]
+        language_map = params[:language_map]
 
         Helper::OvoPoeditorHelper.sync_strings(
           api_token: api_token,
@@ -18,7 +20,9 @@ module Fastlane
           languages: languages,
           output_dir: output_dir,
           file_format: file_format,
-          file_name: file_name
+          file_name: file_name,
+          default_language: default_language,
+          language_map: language_map
         )
       end
 
@@ -83,6 +87,20 @@ module Fastlane
             description: 'Export file format (xcstrings, apple_strings, android_strings)',
             optional: false,
             type: String
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :default_language,
+            env_name: 'POEDITOR_DEFAULT_LANGUAGE',
+            description: 'Default project language',
+            optional: true,
+            type: String
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :language_map,
+            env_name: 'POEDITOR_LANGUAGE_MAP',
+            description: 'The language map to use to resolve a language code to a specific folder',
+            optional: true,
+            type: Hash
           )
         ]
       end

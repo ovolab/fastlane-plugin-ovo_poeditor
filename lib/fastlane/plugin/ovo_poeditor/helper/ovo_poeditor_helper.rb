@@ -12,7 +12,16 @@ module Fastlane
     class OvoPoeditorHelper
       @supported_export_types = %w[apple_strings xcstrings android_strings].freeze
 
-      def self.sync_strings(api_token:, project_id:, languages:, output_dir:, file_format:, file_name:)
+      def self.sync_strings(
+        api_token:,
+        project_id:,
+        languages:,
+        output_dir:,
+        file_format:,
+        file_name:,
+        default_language:,
+        language_map:
+      )
         unless @supported_export_types.include?(file_format)
           UI.error("Invalid export type '#{file_format}'. Allowed values: #{@supported_export_types.join(', ')}")
         end
@@ -35,7 +44,7 @@ module Fastlane
           strings_data = download_file(export_url, language)
           next unless strings_data
 
-          output_path = build_output_path(output_dir, language, file_name, file_format)
+          output_path = build_output_path(output_dir, language, file_name, file_format, default_language, language_map)
 
           begin
             FileUtils.mkdir_p(File.dirname(output_path))
@@ -84,13 +93,22 @@ module Fastlane
         nil
       end
 
-      def self.build_output_path(base_dir, language, file_name, format)
+      def self.build_output_path(base_dir, language, file_name, format, default_language, language_map)
         if format == 'xcstrings'
           "#{base_dir}/#{file_name}"
         elsif format == 'apple_strings'
           "#{base_dir}/#{language}.lproj/#{file_name}"
+        elsif language == default_language
+          "#{base_dir}/values/#{file_name}"
         else
-          "#{base_dir}/values-#{language}/#{file_name}" # ANDROID // values-{language}/strings.xml
+          mapped_language = language_map[language.to_s]
+          values_folder = if mapped_language.nil? || mapped_language.empty?
+                            "values-#{language}"
+                          else
+                            "values-#{mapped_language}"
+                          end
+
+          "#{base_dir}/#{values_folder}/#{file_name}"
         end
       end
     end
