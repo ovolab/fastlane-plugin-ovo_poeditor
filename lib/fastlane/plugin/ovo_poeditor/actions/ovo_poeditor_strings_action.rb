@@ -13,6 +13,7 @@ module Fastlane
         file_name = params[:file_name]
         default_language = params[:default_language]
         language_map = params[:language_map]
+        unquoted_strings = params[:unquoted_strings]
 
         Helper::OvoPoeditorHelper.sync_strings(
           api_token: api_token,
@@ -22,7 +23,8 @@ module Fastlane
           file_format: file_format,
           file_name: file_name,
           default_language: default_language,
-          language_map: language_map
+          language_map: language_map,
+          unquoted_strings: unquoted_strings
         )
       end
 
@@ -101,6 +103,14 @@ module Fastlane
             description: 'The language map to use to resolve a language code to a specific folder',
             optional: true,
             type: Hash
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :unquoted_strings,
+            env_name: 'POEDITOR_UNQUOTED_STRINGS',
+            description: 'The language map to use to resolve a language code to a specific folder',
+            optional: true,
+            type: Integer,
+            default_value: 0
           )
         ]
       end

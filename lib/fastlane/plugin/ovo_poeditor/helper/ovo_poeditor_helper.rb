@@ -20,7 +20,8 @@ module Fastlane
         file_format:,
         file_name:,
         default_language:,
-        language_map:
+        language_map:,
+        unquoted_strings:
       )
         unless @supported_export_types.include?(file_format)
           UI.error("Invalid export type '#{file_format}'. Allowed values: #{@supported_export_types.join(', ')}")
@@ -33,7 +34,8 @@ module Fastlane
             api_token: api_token,
             project_id: project_id,
             language: language,
-            file_format: file_format
+            file_format: file_format,
+            unquoted_strings: unquoted_strings
           )
 
           if export_url.nil?
@@ -58,18 +60,21 @@ module Fastlane
         end
       end
 
-      def self.fetch_export_url(api_token:, project_id:, language:, file_format:)
+      def self.fetch_export_url(api_token:, project_id:, language:, file_format:, unquoted_strings:)
         uri = URI('https://api.poeditor.com/v2/projects/export')
         request = Net::HTTP::Post.new(uri)
 
         form_data = {
-          "api_token" => api_token,
-          "id" => project_id,
-          "language" => language,
-          "order" => "terms",
-          "type" => file_format
+          'api_token' => api_token,
+          'id' => project_id,
+          'language' => language,
+          'order' => 'terms',
+          'type' => file_format
         }
         form_data['options'] = '[{"export_all":1}]' if file_format == 'xcstrings'
+        form_data['options'] = "[{'unquoted': #{unquoted_strings}}]" if file_format == 'android_strings'
+
+        puts form_data
 
         request.set_form_data(form_data)
 
