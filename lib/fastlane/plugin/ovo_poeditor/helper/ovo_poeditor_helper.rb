@@ -104,7 +104,7 @@ module Fastlane
         elsif language == default_language
           "#{base_dir}/values/#{file_name}"
         else
-          mapped_language = language_map[language.to_s]
+          mapped_language = language_map&.[](language.to_s)
           values_folder = if mapped_language.nil? || mapped_language.empty?
                             "values-#{language}"
                           else

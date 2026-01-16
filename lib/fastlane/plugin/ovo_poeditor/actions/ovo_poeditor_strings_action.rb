@@ -99,7 +99,6 @@ module Fastlane
           ),
           FastlaneCore::ConfigItem.new(
             key: :language_map,
-            env_name: 'POEDITOR_LANGUAGE_MAP',
             description: 'The language map to use to resolve a language code to a specific folder',
             optional: true,
             type: Hash
