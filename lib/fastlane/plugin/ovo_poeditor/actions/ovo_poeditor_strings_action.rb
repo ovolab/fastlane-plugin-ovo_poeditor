@@ -51,65 +51,68 @@ module Fastlane
           FastlaneCore::ConfigItem.new(
             key: :api_token,
             env_name: 'POEDITOR_API_TOKEN',
-            description: 'POEditor read-only API Token',
+            description: 'POEditor API token (read-only recommended)',
             optional: false,
             type: String
           ),
           FastlaneCore::ConfigItem.new(
             key: :project_id,
             env_name: 'POEDITOR_PROJECT_ID',
-            description: 'POEditor Project ID',
+            description: 'POEditor project ID',
             optional: false,
             type: String
           ),
           FastlaneCore::ConfigItem.new(
             key: :languages,
             env_name: 'POEDITOR_LANGUAGES',
-            description: 'The languages to export strings for',
+            description: 'List of language codes to export (e.g. ["en", "it"])',
             optional: false,
             type: Array
           ),
           FastlaneCore::ConfigItem.new(
             key: :output_dir,
             env_name: 'POEDITOR_OUTPUT_DIR',
-            description: 'Directory containing strings file',
+            description: 'Output directory where the localized files will be written',
             optional: false,
             type: String
           ),
           FastlaneCore::ConfigItem.new(
             key: :file_name,
             env_name: 'POEDITOR_FILE_NAME',
-            description: 'The name of the file to be downloaded',
+            description: 'Output file name to write (e.g. Localizable.strings, strings.xml)',
             optional: false,
             type: String
           ),
           FastlaneCore::ConfigItem.new(
             key: :file_format,
             env_name: 'POEDITOR_EXPORT_FILE_FORMAT',
-            description: 'Export file format (xcstrings, apple_strings, android_strings)',
+            description: 'Export file format: xcstrings, apple_strings, android_strings',
             optional: false,
             type: String
           ),
           FastlaneCore::ConfigItem.new(
             key: :default_language,
             env_name: 'POEDITOR_DEFAULT_LANGUAGE',
-            description: 'Default project language',
+            description: 'Default/fallback language code for the project',
             optional: true,
             type: String
           ),
           FastlaneCore::ConfigItem.new(
             key: :language_map,
-            description: 'The language map to use to resolve a language code to a specific folder',
+            description: 'Map POEditor language codes to platform-specific folder names',
             optional: true,
             type: Hash
           ),
           FastlaneCore::ConfigItem.new(
             key: :unquoted_strings,
             env_name: 'POEDITOR_UNQUOTED_STRINGS',
-            description: 'The language map to use to resolve a language code to a specific folder',
+            description: 'Set to 1 to export Android strings without quotes (unquoted). Allowed values: 0 or 1',
             optional: true,
             type: Integer,
-            default_value: 0
+            default_value: 0,
+            verify_block: proc do |value|
+              UI.user_error!("unquoted_strings (POEDITOR_UNQUOTED_STRINGS) must be 0 or 1. Received: #{value}.") unless [0, 1].include?(value)
+            end
           )
         ]
       end
