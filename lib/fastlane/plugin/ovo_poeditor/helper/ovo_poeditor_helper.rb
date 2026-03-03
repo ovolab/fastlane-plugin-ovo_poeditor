@@ -21,7 +21,8 @@ module Fastlane
         file_name:,
         default_language:,
         language_map:,
-        unquoted_strings:
+        unquoted_strings:,
+        bypass_default_language:
       )
         unless @supported_export_types.include?(file_format)
           UI.error("Invalid export type '#{file_format}'. Allowed values: #{@supported_export_types.join(', ')}")
@@ -46,7 +47,7 @@ module Fastlane
           strings_data = download_file(export_url, language)
           next unless strings_data
 
-          output_path = build_output_path(output_dir, language, file_name, file_format, default_language, language_map)
+          output_path = build_output_path(output_dir, language, file_name, file_format, default_language, language_map, bypass_default_language)
 
           begin
             FileUtils.mkdir_p(File.dirname(output_path))
@@ -96,22 +97,24 @@ module Fastlane
         nil
       end
 
-      def self.build_output_path(base_dir, language, file_name, format, default_language, language_map)
+      def self.build_output_path(base_dir, language, file_name, format, default_language, language_map, bypass_default_language)
         if format == 'xcstrings'
           "#{base_dir}/#{file_name}"
         elsif format == 'apple_strings'
           "#{base_dir}/#{language}.lproj/#{file_name}"
-        elsif language == default_language
-          "#{base_dir}/values/#{file_name}"
-        else
-          mapped_language = language_map&.[](language.to_s)
-          values_folder = if mapped_language.nil? || mapped_language.empty?
-                            "values-#{language}"
-                          else
-                            "values-#{mapped_language}"
-                          end
+        elsif format == 'android_strings'
+          if language == default_language && !bypass_default_language
+            "#{base_dir}/values/#{file_name}"
+          else
+            mapped_language = language_map&.[](language.to_s)
+            values_folder = if mapped_language.nil? || mapped_language.empty?
+                              "values-#{language}"
+                            else
+                              "values-#{mapped_language}"
+                            end
 
-          "#{base_dir}/#{values_folder}/#{file_name}"
+            "#{base_dir}/#{values_folder}/#{file_name}"
+          end
         end
       end
     end
