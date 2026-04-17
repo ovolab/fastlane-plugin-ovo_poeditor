@@ -8,10 +8,17 @@ describe Fastlane::Helper::OvoPoeditorHelper do
       expect(described_class.normalize_newlines(input)).to eq(expected)
     end
 
-    it 'leaves keys unchanged' do
+    it 'leaves keys unchanged with double \n' do
       input = '"KEY\\nFOO" = "value\\nhere";'
       result = described_class.normalize_newlines(input)
       expect(result).to include('"KEY\\nFOO"')
+      expect(result).to include('"value\nhere"')
+    end
+
+    it 'leaves keys unchanged with single \n' do
+      input = '"KEY\nFOO" = "value\\nhere";'
+      result = described_class.normalize_newlines(input)
+      expect(result).to include('"KEY\nFOO"')
       expect(result).to include('"value\nhere"')
     end
 
