@@ -47,6 +47,8 @@ module Fastlane
           strings_data = download_file(export_url, language)
           next unless strings_data
 
+          strings_data = normalize_newlines(strings_data) if file_format == 'apple_strings'
+
           output_path = build_output_path(output_dir, language, file_name, file_format, default_language, language_map, bypass_default_language)
 
           begin
@@ -95,6 +97,12 @@ module Fastlane
       rescue StandardError => e
         UI.error("Error downloading file for language '#{language}': #{e.message}")
         nil
+      end
+
+      def self.normalize_newlines(content)
+        content.gsub(/= "((?:[^"\\]|\\.)*)"/) do
+          "= \"#{$1.gsub(/\\\\n/) { '\n' }}\""
+        end
       end
 
       def self.build_output_path(base_dir, language, file_name, format, default_language, language_map, bypass_default_language)
