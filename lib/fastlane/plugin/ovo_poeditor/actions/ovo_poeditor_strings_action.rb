@@ -15,6 +15,7 @@ module Fastlane
         language_map = params[:language_map]
         unquoted_strings = params[:unquoted_strings]
         bypass_default_language = params[:bypass_default_language]
+        fallback_languages = params[:fallback_languages]
 
         Helper::OvoPoeditorHelper.sync_strings(
           api_token: api_token,
@@ -26,7 +27,8 @@ module Fastlane
           default_language: default_language,
           language_map: language_map,
           unquoted_strings: unquoted_strings,
-          bypass_default_language: bypass_default_language
+          bypass_default_language: bypass_default_language,
+          fallback_languages: fallback_languages
         )
       end
 
@@ -121,6 +123,13 @@ module Fastlane
             optional: true,
             type: Boolean,
             default_value: false
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :fallback_languages,
+            env_name: 'POEDITOR_FALLBACK_LANGUAGES',
+            description: 'Optional. Map of fallback languages',
+            optional: true,
+            type: Hash
           )
         ]
       end
