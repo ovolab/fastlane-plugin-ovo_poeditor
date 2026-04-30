@@ -1,9 +1,8 @@
-describe Fastlane::Actions::OvoPoeditorAction do
-  describe '#run' do
-    it 'prints a message' do
-      expect(Fastlane::UI).to receive(:message).with("The ovo_poeditor plugin is working!")
+require 'spec_helper'
 
-      Fastlane::Actions::OvoPoeditorAction.run(nil)
-    end
+describe Fastlane::Actions::OvoPoeditorStringsAction do
+  it 'is supported on all platforms' do
+    expect(described_class.is_supported?(:ios)).to be true
+    expect(described_class.is_supported?(:android)).to be true
   end
 end

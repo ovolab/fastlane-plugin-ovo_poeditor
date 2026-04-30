@@ -80,7 +80,7 @@ module Fastlane
         form_data['options'] = "[{'unquoted': #{unquoted_strings}}]" if file_format == 'android_strings'
 
         fallback_language = fallback_languages&.[](language.to_s)
-        form_data['fallback_language'] = "#{fallback_language}" if fallback_language
+        form_data['fallback_language'] = fallback_language if fallback_language && !fallback_language.empty?
 
         request.set_form_data(form_data)
 
