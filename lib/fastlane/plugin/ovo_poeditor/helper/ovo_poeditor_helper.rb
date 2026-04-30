@@ -22,7 +22,8 @@ module Fastlane
         default_language:,
         language_map:,
         unquoted_strings:,
-        bypass_default_language:
+        bypass_default_language:,
+        fallback_languages:
       )
         unless @supported_export_types.include?(file_format)
           UI.error("Invalid export type '#{file_format}'. Allowed values: #{@supported_export_types.join(', ')}")
@@ -36,7 +37,8 @@ module Fastlane
             project_id: project_id,
             language: language,
             file_format: file_format,
-            unquoted_strings: unquoted_strings
+            unquoted_strings: unquoted_strings,
+            fallback_languages: fallback_languages
           )
 
           if export_url.nil?
@@ -63,7 +65,7 @@ module Fastlane
         end
       end
 
-      def self.fetch_export_url(api_token:, project_id:, language:, file_format:, unquoted_strings:)
+      def self.fetch_export_url(api_token:, project_id:, language:, file_format:, unquoted_strings:, fallback_languages:)
         uri = URI('https://api.poeditor.com/v2/projects/export')
         request = Net::HTTP::Post.new(uri)
 
@@ -76,6 +78,9 @@ module Fastlane
         }
         form_data['options'] = '[{"export_all":1}]' if file_format == 'xcstrings'
         form_data['options'] = "[{'unquoted': #{unquoted_strings}}]" if file_format == 'android_strings'
+
+        fallback_language = fallback_languages&.[](language.to_s)
+        form_data['fallback_language'] = fallback_language if fallback_language && !fallback_language.empty?
 
         request.set_form_data(form_data)
 
